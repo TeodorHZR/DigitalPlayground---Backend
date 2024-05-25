@@ -9,8 +9,8 @@ namespace DigitalPlayground.Business.Contracts
 {
     public interface IGameCategoryRepository
     {
-        void AddGameToCategory(int gameId, int categoryId);
-        void RemoveGameFromCategory(int gameId, int categoryId);
+        void AddGameToCategory(GameCategory gameCategory);
+        void RemoveGameFromCategory(GameCategory gameCategory);
         int[] GetCategoriesForGame(int gameId);
 
         int[] GetGamesForCategory(int categoryId);

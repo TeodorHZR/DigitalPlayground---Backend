@@ -11,12 +11,13 @@ namespace DigitalPlayground.Business.Domains
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime StartingTime { get; set; }
-
-        public Tournament(int tournamentId, string name, DateTime startingTime)
+        public float Prize {  get; set; }
+        public Tournament(int tournamentId, string name, DateTime startingTime, float prize)
         {
             Id = tournamentId;
             Name = name;
             StartingTime = startingTime;
+            Prize = prize;
         }
         public Tournament() { }
     }

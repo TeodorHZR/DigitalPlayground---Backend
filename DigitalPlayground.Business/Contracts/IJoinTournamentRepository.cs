@@ -9,7 +9,7 @@ namespace DigitalPlayground.Business.Contracts
 {
     public interface IJoinTournamentRepository
     {
-        int Insert(JoinTournament joinTournament);
+        int InsertOrUpdate(JoinTournament joinTournament);
         JoinTournament GetById(int id);
         void Update(JoinTournament joinTournament);
         void Delete(int id);

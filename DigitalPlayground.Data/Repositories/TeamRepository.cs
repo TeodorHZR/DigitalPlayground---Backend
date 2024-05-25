@@ -19,7 +19,7 @@ namespace DigitalPlayground.Data.Repositories
         public void Insert(Team team)
         {
             using var db = new SqlDataContext(_connectionString);
-            var sql = "INSERT INTO Team (Name) VALUES (@Name)";
+            var sql = "INSERT INTO Team (Name, Description) VALUES (@Name, @Description)";
             db.Connection.Execute(sql, team);
         }
 

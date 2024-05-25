@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using DigitalPlayground.Business;
 using DigitalPlayground.Business.Contracts;
+using DigitalPlayground.Business.Domains;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -15,18 +16,18 @@ namespace DigitalPlayground.Data.Repositories
             _connectionString = connectionString;
         }
 
-        public void AddGameToCategory(int gameId, int categoryId)
+        public void AddGameToCategory(GameCategory gameCategory)
         {
             using var db = new SqlDataContext(_connectionString);
             var sql = "INSERT INTO GameCategory (GameId, CategoryId) VALUES (@GameId, @CategoryId)";
-            db.Connection.Execute(sql, new { GameId = gameId, CategoryId = categoryId });
+            db.Connection.Execute(sql, gameCategory);
         }
 
-        public void RemoveGameFromCategory(int gameId, int categoryId)
+        public void RemoveGameFromCategory(GameCategory gameCategory)
         {
             using var db = new SqlDataContext(_connectionString);
             var sql = "DELETE FROM GameCategory WHERE GameId = @GameId AND CategoryId = @CategoryId";
-            db.Connection.Execute(sql, new { GameId = gameId, CategoryId = categoryId });
+            db.Connection.Execute(sql, gameCategory);
         }
 
         public int[] GetCategoriesForGame(int gameId)

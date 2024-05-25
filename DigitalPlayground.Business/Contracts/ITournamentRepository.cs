@@ -14,6 +14,7 @@ namespace DigitalPlayground.Business.Contracts
         IEnumerable<Tournament> GetAll();
         void Update(Tournament tournament);
         void Delete(int id);
+        Tournament GetUpcomingTournament();
 
     }
 }

@@ -12,16 +12,14 @@ namespace DigitalPlayground.Business.Domains
         public int UserId { get; set; }
         public decimal Amount { get; set; }
         public int GameId { get; set; }
-        public DateTime Date { get; set; }
-        public GameTransaction() { }
+        public DateTime Date { get; set; }= DateTime.Now;
 
-        public GameTransaction(int gameTransactionId, int userId, decimal amount, int gameId, DateTime date)
+
+        public GameTransaction(int userId, decimal amount, int gameId)
         {
-            Id = gameTransactionId;
             UserId = userId;
             Amount = amount;
             GameId = gameId;
-            Date = date;
         }
     }
 }

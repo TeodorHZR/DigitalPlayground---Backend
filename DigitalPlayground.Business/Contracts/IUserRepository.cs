@@ -14,6 +14,8 @@ namespace DigitalPlayground.Business.Contracts
         int Insert(User user);
         void Delete(int id);
         void UpdateAdminStatus(int userId, bool isAdmin);
+        public (int Id, float Money) GetIdAndMoneyByUsername(string username);
+        public void UpdateMoney(int userId, float money);
 
     }
 }

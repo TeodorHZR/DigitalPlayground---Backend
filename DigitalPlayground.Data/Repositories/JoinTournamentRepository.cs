@@ -16,12 +16,27 @@ namespace DigitalPlayground.Data.Repositories
             _connectionString = connectionString;
         }
 
-        public int Insert(JoinTournament joinTournament)
+        public int InsertOrUpdate(JoinTournament joinTournament)
         {
             using var db = new SqlDataContext(_connectionString);
-            var sql = "INSERT INTO JoinTournament (TournamentId, UserId) VALUES (@TournamentId, @UserId); SELECT SCOPE_IDENTITY()";
-            return db.Connection.ExecuteScalar<int>(sql, joinTournament);
+            var existingJoinTournament = db.Connection.QueryFirstOrDefault<JoinTournament>(
+                "SELECT * FROM JoinTournament WHERE TournamentId = @TournamentId AND UserId = @UserId",
+                new { TournamentId = joinTournament.TournamentId, UserId = joinTournament.UserId });
+
+            if (existingJoinTournament != null)
+            {
+                var sql = "UPDATE JoinTournament SET TournamentId = @TournamentId, UserId = @UserId WHERE Id = @Id";
+                db.Connection.Execute(sql, new { TournamentId = joinTournament.TournamentId, UserId = joinTournament.UserId, Id = existingJoinTournament.Id });
+
+                return existingJoinTournament.Id;
+            }
+            else
+            {
+                var sql = "INSERT INTO JoinTournament (TournamentId, UserId) VALUES (@TournamentId, @UserId); SELECT SCOPE_IDENTITY()";
+                return db.Connection.ExecuteScalar<int>(sql, joinTournament);
+            }
         }
+
 
         public JoinTournament GetById(int id)
         {

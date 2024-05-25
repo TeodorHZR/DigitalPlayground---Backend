@@ -43,6 +43,24 @@ namespace DigitalPlayground.Controllers
             }
             return new GameModel(game);
         }
+        [HttpGet("category/{categoryId}")]
+        public ActionResult<IEnumerable<GameModel>> GetByCategoryId([FromRoute] int categoryId)
+        {
+            try
+            {
+                var games = gameRepository.GetByCategoryId(categoryId);
+                if (games == null || !games.Any())
+                {
+                    return NotFound("No games found for the specified category.");
+                }
+
+                return games.Select(x => new GameModel(x)).ToList();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving games by category.");
+            }
+        }
 
         [HttpPost("")]
         public ActionResult<int> Insert([FromBody] GameModel game)

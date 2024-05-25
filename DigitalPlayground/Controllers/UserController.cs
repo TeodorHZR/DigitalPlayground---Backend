@@ -30,7 +30,6 @@ namespace DigitalPlayground.Controllers
             _configuration = configuration;
             _refreshTokenRepository = refreshTokensRepository;
         }
-
         [HttpPost("login")]
         public IActionResult Login(UserModel model)
         {
@@ -41,13 +40,15 @@ namespace DigitalPlayground.Controllers
                 return Unauthorized();
             }
 
-            var token = GenerateJwtToken(user.Username);
+            var jwtToken = GenerateJwtToken(user.Username);
             var refreshToken = GenerateRefreshToken();
+            var expirationDate = DateTime.UtcNow.AddMinutes(_tokenExpirationMinutes);
 
             _refreshTokenRepository.SaveRefreshToken(user.Id, refreshToken);
 
-            return Ok(new { token, refreshToken });
+            return Ok(new { jwtToken, refreshToken, expirationDate });
         }
+
 
 
         [HttpPost("refresh")]
@@ -70,6 +71,17 @@ namespace DigitalPlayground.Controllers
             var token = GenerateJwtToken(user.Username);
 
             return Ok(new { token });
+        }
+        [HttpGet("id-and-money/{username}")]
+        public IActionResult GetIdAndMoneyByUsername(string username)
+        {
+            var (userId, money) = _userRepository.GetIdAndMoneyByUsername(username);
+            if (userId == 0)
+            {
+                return NotFound($"Utilizatorul cu numele '{username}' nu a fost găsit.");
+            }
+
+            return Ok(new { UserId = userId, Money = money });
         }
         [HttpPost("insert")]
         public void Insert([FromBody] UserModel user)
@@ -107,6 +119,22 @@ namespace DigitalPlayground.Controllers
 
             return Ok();
         }
+
+
+        [HttpPut("{id}/updateMoney")]
+        public IActionResult UpdateMoney(int id, [FromBody] UpdateMoneyModel model)
+        {
+            var user = _userRepository.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _userRepository.UpdateMoney(id, model.UpdatedMoney);
+
+            return Ok();
+        }
+
 
         private string GenerateJwtToken(string username)
         {

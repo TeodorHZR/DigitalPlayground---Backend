@@ -38,7 +38,7 @@ namespace DigitalPlayground.Data.Repositories
         public List<Game> GetByCategoryId(int id)
         {
             using var db = new SqlDataContext(connectionString);
-            var sql = "SELECT Id, Name, Description, Price, Rating FROM Game WHERE CategoryId = @id ORDER BY Id";
+            var sql = "SELECT Id, Name, Description, Price, Rating FROM Game as A inner join GameCategory as B on A.id = B.gameid WHERE B.CategoryId = @id ORDER BY Id";
             var list = db.Connection.Query<Game>(sql, new { id }).ToList();
             return list;
         }

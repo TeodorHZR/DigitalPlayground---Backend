@@ -44,6 +44,15 @@ builder.Services.AddTransient<IConnectionString>(x => new ConnectionString(build
 builder.Services.AddTransient<IGameRepository, GameRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IRefreshTokensRepository, RefreshTokensRepository>();
+builder.Services.AddTransient<IGameCategoryRepository, GameCategoryRepository>();
+builder.Services.AddTransient<IGameTransactionRepository,GameTransactionRepository>();
+builder.Services.AddTransient<IJoinTournamentRepository, JoinTournamentRepository>();
+builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
+builder.Services.AddTransient<ISkinRepository, SkinRepository>();
+builder.Services.AddTransient<ISkinTransactionRepository, SkinTransactionRepository>();
+builder.Services.AddTransient<ITeamMemberRepository, TeamMemberRepository>();
+builder.Services.AddTransient<ITeamRepository, TeamRepository>();
+builder.Services.AddTransient<ITournamentRepository, TournamentRepository>();
 
 var app = builder.Build();
 

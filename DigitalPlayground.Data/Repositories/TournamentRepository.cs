@@ -19,7 +19,7 @@ namespace DigitalPlayground.Data.Repositories
         public int Insert(Tournament tournament)
         {
             using var db = new SqlDataContext(_connectionString);
-            var sql = "INSERT INTO Tournament (Name, StartingTime) VALUES (@Name, @StartingTime); SELECT SCOPE_IDENTITY()";
+            var sql = "INSERT INTO Tournament (Name, StartingTime, prize) VALUES (@Name, @StartingTime, @Prize); SELECT SCOPE_IDENTITY()";
             return db.Connection.ExecuteScalar<int>(sql, tournament);
         }
 
@@ -33,8 +33,8 @@ namespace DigitalPlayground.Data.Repositories
         public IEnumerable<Tournament> GetAll()
         {
             using var db = new SqlDataContext(_connectionString);
-            var sql = "SELECT * FROM Tournament";
-            return db.Connection.Query<Tournament>(sql);
+            var sql = "SELECT * FROM Tournament WHERE startingTime > @CurrentDateTime";
+            return db.Connection.Query<Tournament>(sql, new { CurrentDateTime = DateTime.Now });
         }
 
         public void Update(Tournament tournament)
@@ -49,6 +49,16 @@ namespace DigitalPlayground.Data.Repositories
             using var db = new SqlDataContext(_connectionString);
             var sql = "DELETE FROM Tournament WHERE Id = @Id";
             db.Connection.Execute(sql, new { Id = id });
+        }
+        public Tournament GetUpcomingTournament()
+        {
+            using var db = new SqlDataContext(_connectionString);
+            var sql = @"
+                SELECT TOP 1 * 
+                FROM Tournament 
+                WHERE startingTime > @CurrentDateTime 
+                ORDER BY startingTime ASC";
+            return db.Connection.QueryFirstOrDefault<Tournament>(sql, new { CurrentDateTime = DateTime.Now });
         }
     }
 }

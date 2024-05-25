@@ -23,11 +23,12 @@ namespace DigitalPlayground.Data.Repositories
             db.Connection.Execute(sql, teamMember);
         }
 
-        public TeamMember GetById(int teamId, int userId)
+        public bool GetById(int teamId, int userId)
         {
             using var db = new SqlDataContext(_connectionString);
-            var sql = "SELECT * FROM TeamMember WHERE TeamId = @TeamId AND UserId = @UserId";
-            return db.Connection.QueryFirstOrDefault<TeamMember>(sql, new { TeamId = teamId, UserId = userId });
+            var sql = "SELECT COUNT(1) FROM TeamMember WHERE TeamId = @TeamId AND UserId = @UserId";
+            var x =  db.Connection.ExecuteScalar<int>(sql, new { TeamId = teamId, UserId = userId }) > 0;
+            return x;
         }
 
         public void Delete(int teamId, int userId)
