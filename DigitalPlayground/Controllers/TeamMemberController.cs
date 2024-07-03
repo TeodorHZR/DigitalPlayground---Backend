@@ -22,7 +22,7 @@ namespace DigitalPlayground.Controllers
         {
             try
             {
-                _teamMemberRepository.Insert(teamMember);
+                _teamMemberRepository.InsertOrUpdate(teamMember);
                 return Ok();
             }
             catch (Exception ex)

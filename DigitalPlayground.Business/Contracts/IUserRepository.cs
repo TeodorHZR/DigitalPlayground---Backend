@@ -16,6 +16,8 @@ namespace DigitalPlayground.Business.Contracts
         void UpdateAdminStatus(int userId, bool isAdmin);
         public (int Id, float Money) GetIdAndMoneyByUsername(string username);
         public void UpdateMoney(int userId, float money);
+        void UpdatePassword(int userId, string newPassword);
+        IEnumerable<User> GetAll();
 
     }
 }

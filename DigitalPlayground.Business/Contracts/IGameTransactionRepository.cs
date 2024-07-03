@@ -13,5 +13,10 @@ namespace DigitalPlayground.Business.Contracts
         GameTransaction GetById(int id);
         void Update(GameTransaction gameTransaction);
         void Delete(int id);
+        IEnumerable<GameTransactionDetails> GetUserPurchasedGames(int userId, int offset, int limit);
+
+        int GetTotalUserPurchasedGames(int userId);
+        IEnumerable<GameTransactionDetails> GetAllTransactions();
+        IEnumerable<GameSalesStats> GetGameSalesStatistics();
     }
 }

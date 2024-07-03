@@ -7,6 +7,7 @@ namespace DigitalPlayground.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public bool IsAdmin { get; set; }
+        public float Money {  get; set; }
         public UserModel() { }
         public UserModel(User entity)
         {
@@ -14,6 +15,7 @@ namespace DigitalPlayground.Models
             Username = entity.Username;
             Password = entity.Password;
             IsAdmin = entity.IsAdmin;
+            Money = entity.Money;
         }
     }
     

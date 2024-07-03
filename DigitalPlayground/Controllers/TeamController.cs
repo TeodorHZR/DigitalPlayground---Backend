@@ -42,7 +42,7 @@ namespace DigitalPlayground.Controllers
             return Ok(team);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public IActionResult CreateTeam([FromBody] Team team)
         {
             try

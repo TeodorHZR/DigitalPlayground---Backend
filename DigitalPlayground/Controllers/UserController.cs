@@ -30,6 +30,14 @@ namespace DigitalPlayground.Controllers
             _configuration = configuration;
             _refreshTokenRepository = refreshTokensRepository;
         }
+
+        [HttpGet("getall")]
+        public ActionResult<IEnumerable<User>> GetAllUsers()
+        {
+            var users = _userRepository.GetAll();
+            return Ok(users);
+        }
+
         [HttpPost("login")]
         public IActionResult Login(UserModel model)
         {
@@ -86,7 +94,7 @@ namespace DigitalPlayground.Controllers
         [HttpPost("insert")]
         public void Insert([FromBody] UserModel user)
         {
-            var us = new User(user.Id, user.Username, user.Password, user.IsAdmin);
+            var us = new User(user.Id, user.Username, user.Password, user.IsAdmin, user.Money);
             us.EncryptPassword();
             user.Id = _userRepository.Insert(us);
 
@@ -134,7 +142,32 @@ namespace DigitalPlayground.Controllers
 
             return Ok();
         }
+        [HttpGet("{username}")]
+        public IActionResult GetUserData(string username)
+        {
+            var user = _userRepository.GetByUsername(username);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+            return Ok(user);
+        }
 
+        [HttpPut("{id}/updatePassword")]
+        public IActionResult UpdatePassword(int id, [FromBody] UpdatePasswordModel model)
+        {
+            var user = _userRepository.GetById(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var encryptedPassword = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+
+            _userRepository.UpdatePassword(id, encryptedPassword);
+
+            return Ok();
+        }
 
         private string GenerateJwtToken(string username)
         {

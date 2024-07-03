@@ -13,6 +13,7 @@ namespace DigitalPlayground.Business.Contracts
         SkinTransaction GetById(int id);
         void Update(SkinTransaction skinTransaction);
         void Delete(int id);
-
+        public IEnumerable<SkinTransaction> GetAll();
+        IEnumerable<Skin> GetTop3SkinsByPrice();
     }
 }

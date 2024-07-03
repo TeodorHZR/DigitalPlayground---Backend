@@ -60,8 +60,6 @@ namespace DigitalPlayground.Controllers
                 {
                     return NotFound("Join tournament not found.");
                 }
-
-                // Update the existing join tournament
                 existingJoinTournament.TournamentId = model.TournamentId;
                 existingJoinTournament.UserId = model.UserId;
 
@@ -91,6 +89,19 @@ namespace DigitalPlayground.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Error deleting join tournament.");
+            }
+        }
+        [HttpGet("user/{userId}/tournaments")]
+        public ActionResult<IEnumerable<Tournament>> GetTournamentsForUser(int userId)
+        {
+            try
+            {
+                var tournaments = _joinTournamentRepository.GetTournamentsForUser(userId);
+                return Ok(tournaments);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error retrieving tournaments for user.");
             }
         }
     }

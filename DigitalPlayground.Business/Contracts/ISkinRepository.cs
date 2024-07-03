@@ -14,7 +14,7 @@ namespace DigitalPlayground.Business.Contracts
         void Update(Skin skin);
         void Delete(int id);
 
-        IEnumerable<Skin> GetAll();
+        IEnumerable<Skin> GetAll(int pageNumber, int pageSize);
 
         IEnumerable<Skin> GetAllAvailableForUser(int userId);
         IEnumerable<Skin> GetAllAvailableForGame(int gameId, int excludeUserId);
@@ -24,5 +24,8 @@ namespace DigitalPlayground.Business.Contracts
         IEnumerable<Skin> GetSkinsOrderedByPrice(bool ascending, int gameId, int excludeUserId);
 
         IEnumerable<Skin> GetSkinsByMaxPrice(float maxPrice, int gameId, int excludeUserId);
+        IEnumerable<Skin> GetAllByUserId(int userId);
+        void UpdateIsForSale(int skinId, bool isForSale);
+        void UpdatePrice(int skinId, float price);
     }
 }

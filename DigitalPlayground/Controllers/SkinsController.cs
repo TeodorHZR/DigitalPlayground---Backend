@@ -77,11 +77,11 @@ namespace DigitalPlayground.Controllers
 
 
         [HttpGet]
-        public ActionResult<IEnumerable<Skin>> GetAllSkins()
+        public ActionResult<IEnumerable<Skin>> GetAllSkins(int pageNumber = 1, int pageSize = 10)
         {
             try
             {
-                var skins = _skinRepository.GetAll();
+                var skins = _skinRepository.GetAll(pageNumber, pageSize);
                 return Ok(skins);
             }
             catch (Exception ex)
@@ -89,6 +89,7 @@ namespace DigitalPlayground.Controllers
                 return StatusCode(500, "Error retrieving skins.");
             }
         }
+
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
@@ -162,6 +163,48 @@ namespace DigitalPlayground.Controllers
         {
             var skins = _skinRepository.GetSkinsOrderedByPrice(ascending, gameId, excludeUserId);
             return Ok(skins);
+        }
+        [HttpGet("user/{userId}")]
+        public ActionResult<IEnumerable<Skin>> GetAllByUserId(int userId)
+        {
+            try
+            {
+                var skins = _skinRepository.GetAllByUserId(userId);
+                return Ok(skins);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error retrieving skins.");
+            }
+        }
+
+        [HttpPut("{skinId}/isForSale")]
+        public IActionResult UpdateIsForSale(int skinId, [FromBody] UpdateSkinStatus status)
+        {
+            try
+            {
+                Console.WriteLine($"Received request to update IsForSale for skinId: {skinId} to {status.IsForSale}");
+                _skinRepository.UpdateIsForSale(skinId, status.IsForSale);
+                return Ok(new { message = "IsForSale updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while updating IsForSale.", error = ex.Message });
+            }
+        }
+        [HttpPut("{skinId}/price")]
+        public IActionResult UpdatePrice(int skinId, [FromBody] UpdateSkinPrice price)
+        {
+            try
+            {
+                Console.WriteLine($"Received request to update price for skinId: {skinId} to {price.Price}");
+                _skinRepository.UpdatePrice(skinId, price.Price);
+                return Ok(new { message = "Price updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while updating the price.", error = ex.Message });
+            }
         }
     }
 }

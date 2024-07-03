@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using DigitalPlayground.Business.Contracts;
 using DigitalPlayground.Business.Domains;
 using DigitalPlayground.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 namespace DigitalPlayground.Controllers

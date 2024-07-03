@@ -16,12 +16,25 @@ namespace DigitalPlayground.Data.Repositories
             _connectionString = connectionString;
         }
 
-        public void Insert(TeamMember teamMember)
+        public void InsertOrUpdate(TeamMember teamMember)
         {
             using var db = new SqlDataContext(_connectionString);
-            var sql = "INSERT INTO TeamMember (TeamId, UserId) VALUES (@TeamId, @UserId)";
-            db.Connection.Execute(sql, teamMember);
+
+            var sqlSelect = "SELECT COUNT(*) FROM TeamMember WHERE UserId = @UserId";
+            var userExists = db.Connection.ExecuteScalar<int>(sqlSelect, new { teamMember.UserId }) > 0;
+
+            if (userExists)
+            {
+                var sqlUpdate = "UPDATE TeamMember SET TeamId = @TeamId WHERE UserId = @UserId";
+                db.Connection.Execute(sqlUpdate, teamMember);
+            }
+            else
+            {
+                var sqlInsert = "INSERT INTO TeamMember (TeamId, UserId) VALUES (@TeamId, @UserId)";
+                db.Connection.Execute(sqlInsert, teamMember);
+            }
         }
+
 
         public bool GetById(int teamId, int userId)
         {

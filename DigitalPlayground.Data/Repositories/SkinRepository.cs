@@ -43,12 +43,14 @@ namespace DigitalPlayground.Data.Repositories
             db.Connection.Execute(sql, new { UserId = userId, isForSale = 0, Id = skinId });
         }
 
-        public IEnumerable<Skin> GetAll()
+        public IEnumerable<Skin> GetAll(int pageNumber, int pageSize)
         {
             using var db = new SqlDataContext(_connectionString);
-            var sql = "SELECT * FROM Skin";
-            return db.Connection.Query<Skin>(sql).ToList();
+            var offset = (pageNumber - 1) * pageSize;
+            var sql = "SELECT * FROM Skin ORDER BY Id OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
+            return db.Connection.Query<Skin>(sql, new { Offset = offset, PageSize = pageSize }).ToList();
         }
+
         public void Delete(int id)
         {
             using var db = new SqlDataContext(_connectionString);
@@ -80,6 +82,24 @@ namespace DigitalPlayground.Data.Repositories
             var orderBy = ascending ? "ASC" : "DESC";
             var sql = "SELECT * FROM Skin WHERE isForSale = @isForSale AND gameId = @gameId AND userId != @excludeUserId ORDER BY Price " + orderBy;
             return db.Connection.Query<Skin>(sql, new { isForSale = 1, gameId, excludeUserId }).ToList();
+        }
+        public IEnumerable<Skin> GetAllByUserId(int userId)
+        {
+            using var db = new SqlDataContext(_connectionString);
+            var sql = "SELECT * FROM Skin WHERE UserId = @UserId";
+            return db.Connection.Query<Skin>(sql, new { UserId = userId }).ToList();
+        }
+        public void UpdateIsForSale(int skinId, bool isForSale)
+        {
+            using var db = new SqlDataContext(_connectionString);
+            var sql = "UPDATE Skin SET IsForSale = @IsForSale WHERE Id = @Id";
+            db.Connection.Execute(sql, new { IsForSale = isForSale, Id = skinId });
+        }
+        public void UpdatePrice(int skinId, float price)
+        {
+            using var db = new SqlDataContext(_connectionString);
+            var sql = "UPDATE Skin SET Price = @Price WHERE Id = @Id";
+            db.Connection.Execute(sql, new { Price = price, Id = skinId });
         }
 
     }

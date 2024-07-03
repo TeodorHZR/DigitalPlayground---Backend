@@ -58,5 +58,17 @@ namespace DigitalPlayground.Data.Repositories
             var sql = "DELETE FROM JoinTournament WHERE Id = @Id";
             db.Connection.Execute(sql, new { Id = id });
         }
+
+        public IEnumerable<Tournament> GetTournamentsForUser(int userId)
+        {
+            using var db = new SqlDataContext(_connectionString);
+            var sql = @"
+        SELECT t.Name, t.StartingTime, t.Prize 
+        FROM Tournament t
+        INNER JOIN JoinTournament jt ON t.Id = jt.TournamentId
+        WHERE jt.UserId = @UserId";
+            return db.Connection.Query<Tournament>(sql, new { UserId = userId });
+        }
+
     }
 }

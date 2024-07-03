@@ -9,7 +9,7 @@ namespace DigitalPlayground.Business.Contracts
 {
     public interface ITeamMemberRepository
     {
-        void Insert(TeamMember teamMember);
+        void InsertOrUpdate(TeamMember teamMember);
         bool GetById(int teamId, int userId);
         void Delete(int teamId, int userId);
         void Update(TeamMember teamMember);

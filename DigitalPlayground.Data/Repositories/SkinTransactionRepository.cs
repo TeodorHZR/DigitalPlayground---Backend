@@ -43,5 +43,23 @@ namespace DigitalPlayground.Data.Repositories
             var sql = "DELETE FROM SkinTransaction WHERE Id = @Id";
             db.Connection.Execute(sql, new { Id = id });
         }
+        public IEnumerable<SkinTransaction> GetAll()
+        {
+            using var db = new SqlDataContext(_connectionString);
+            var sql = "SELECT * FROM SkinTransaction";
+            return db.Connection.Query<SkinTransaction>(sql);
+        }
+
+        public IEnumerable<Skin> GetTop3SkinsByPrice()
+        {
+            using var db = new SqlDataContext(_connectionString);
+            var sql = @"
+                SELECT TOP 3 s.*
+                FROM SkinTransaction st
+                INNER JOIN Skin s ON st.SkinId = s.Id
+                ORDER BY s.Price DESC";
+            return db.Connection.Query<Skin>(sql);
+        }
+
     }
 }

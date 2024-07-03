@@ -13,6 +13,6 @@ namespace DigitalPlayground.Business.Contracts
         JoinTournament GetById(int id);
         void Update(JoinTournament joinTournament);
         void Delete(int id);
-
+        IEnumerable<Tournament> GetTournamentsForUser(int userId);
     }
 }

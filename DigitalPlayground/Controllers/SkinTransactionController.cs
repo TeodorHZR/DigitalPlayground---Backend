@@ -68,5 +68,20 @@ namespace DigitalPlayground.Controllers
 
             return NoContent();
         }
+        [HttpGet("getall")]
+        public IActionResult GetAll()
+        {
+            var skinTransactions = _skinTransactionRepository.GetAll();
+            return Ok(skinTransactions);
+        }
+        [HttpGet("top3byprice")]
+        public IActionResult GetTop3ByPrice()
+        {
+            var top3Skins = _skinTransactionRepository.GetTop3SkinsByPrice();
+            return Ok(top3Skins);
+        }
+
+
+
     }
 }

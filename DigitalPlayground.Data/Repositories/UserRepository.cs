@@ -69,5 +69,19 @@ namespace DigitalPlayground.Data.Repositories
             var sql = "UPDATE [User] SET [Money] = @updatedMoney WHERE Id = @userId";
             db.Connection.Execute(sql, new { userId, updatedMoney });
         }
+
+        public void UpdatePassword(int userId, string newPassword)
+        {
+            using var db = new SqlDataContext(connectionString);
+            var sql = "UPDATE [User] SET Password = @newPassword WHERE Id = @userId";
+            db.Connection.Execute(sql, new { userId, newPassword });
+        }
+        public IEnumerable<User> GetAll()
+        {
+            using var db = new SqlDataContext(connectionString);
+            var sql = "SELECT * FROM [User]";
+            return db.Connection.Query<User>(sql).ToList();
+        }
+
     }
 }
